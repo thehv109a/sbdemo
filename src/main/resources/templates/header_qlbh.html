@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+<link rel="stylesheet" href="assets/css/ace.min.css" />
+<link rel="stylesheet" href="assets/css/vue2-datepicker.min.css">
+<link rel="stylesheet" href="assets/css/vue-select.css">
+
+<div class="navbar-container ace-save-state" id="navbar-container">
+    <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+        <span class="sr-only">Toggle sidebar</span>
+
+        <span class="icon-bar"></span>
+
+        <span class="icon-bar"></span>
+
+        <span class="icon-bar"></span>
+    </button>
+
+    <div class="navbar-header pull-left">
+        <a href="/" class="navbar-brand">
+            <small>
+                <i class="fa fa-home"></i>
+                Home
+            </small>
+        </a>
+    </div>
+
+    <div class="navbar-buttons navbar-header pull-right" role="navigation">
+        <ul class="nav ace-nav">
+            <li class="light-blue dropdown-modal">
+                <!-- <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <img class="nav-user-photo" src="assets/images/avatars/user.jpg" alt="Jason's Photo" />
+                    <span class="user-info">
+                        <small>Xin chào</small>
+                        <sec:authentication property="principal.email" />
+                    </span>
+
+                    <i class="ace-icon fa fa-caret-down"></i>
+                </a> -->
+
+                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <img class="nav-user-photo" src="assets/images/avatars/user.jpg" alt="Jason's Photo" />
+                    <span class="user-info">
+                        <sec:authentication property="principal.email" />
+                    </span>
+                </a>
+
+                <!-- <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                    <li>
+                        <form id="formLogout" action="#" th:action="@{/logout}" method="POST">
+                            <i class="ace-icon fa fa-power-off"></i>
+                            <a href="javascript:;" onclick="document.getElementById('formLogout').submit();">Logout</a>
+                        </form>
+                        <a href="#">
+                            <i class="ace-icon fa fa-power-off"></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul> -->
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>Chi tiết mặt hàng</title>
+    <meta name="description" content="Static &amp; Dynamic Tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+</head>
+
+<body class="no-skin">
+    <div id="navbar" class="navbar navbar-default ace-save-state">
+        <th:block th:include="/header"></th:block>
+    </div>
+
+    <div class="main-container ace-save-state">
+        <div id="sidebar" class="sidebar responsive ace-save-state">
+            <th:block th:include="/menu"></th:block>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div id="vue_main">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mã HD</label>
+                                    <input class="form-control" v-model="matHang.ma" v-bind:disabled="isEdit" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tên MH</label>
+                                    <input class="form-control" v-model="matHang.ten" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Đơn vị tính</label>
+                                    <select class="form-control" v-model="matHang.donViTinh">
+                                        <option value="Cái">Cái</option>
+                                        <option value="Mét">Mét</option>
+                                        <option value="Sợi">Sợi</option>
+                                        <option value="Bộ">Bộ</option>
+                                        <option value="Gói">Gói</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button class="btn btn-danger" v-on:click="saveItem()">
+                                        <i class="ace-icon fa fa-save"></i>
+                                        <span>Cập nhật</span>
+                                    </button>
+                                    <button class="btn btn-default" v-on:click="goBack()">
+                                        <i class="ace-icon fa fa-arrow-left"></i>
+                                        <span>Quay lại</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="/footer"></th:block>
+    <script src="jspage/mathangct.js"></script>
+</body>
+
+</html>

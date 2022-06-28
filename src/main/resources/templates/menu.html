@@ -1,0 +1,54 @@
+<!-- <ul class="nav nav-list">
+    <li id="sbdemo_menu" class="active open">
+        <a href="/" class="dropdown-toggle">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text">VMS</span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+
+        <ul class="submenu" v-for="item in menus">
+            <li v-bind:class="item.activeClass">
+                <a v-bind:href="item.pathname"><i class="menu-icon fa fa-caret-right"></i>{{item.name}}</a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+        data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+</div> -->
+
+
+<ul class="nav nav-list" id="vue_menu">
+    <li class="active open">
+        <a href="#">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text">Danh mục</span>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li v-bind:class="activeMenu.hoadonxuat">
+                <a href="/hoadonxuat"><i class="menu-icon fa fa-caret-right"></i>HD xuất</a>
+                <b class="arrow"></b>
+            </li>
+            <li v-bind:class="activeMenu.hoadonnhap">
+                <a href="/hoadonnhap"><i class="menu-icon fa fa-caret-right"></i>HD nhập</a>
+                <b class="arrow"></b>
+            </li>
+
+            <li v-bind:class="activeMenu.mathang">
+                <a href="/mathang"><i class="menu-icon fa fa-caret-right"></i>Mặt hàng</a>
+                <b class="arrow"></b>
+            </li>
+
+            <li v-bind:class="activeMenu.xuatnhapton">
+                <a href="/xuatnhapton"><i class="menu-icon fa fa-caret-right"></i>XNT</a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+</ul>

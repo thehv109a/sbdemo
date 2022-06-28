@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>VNP_HOME</title>
+    <meta name="description" content="Static &amp; Dynamic Tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <th:block th:include="/_cssheader"></th:block>
+</head>
+
+<body class="no-skin">
+    <div id="navbar" class="navbar navbar-default ace-save-state">
+        <th:block th:include="/header"></th:block>
+    </div>
+
+    <div class="main-container ace-save-state" id="main-container">
+        <div id="sidebar" class="sidebar responsive ace-save-state">
+            <th:block th:include="/menu"></th:block>
+        </div>
+
+        <div class="main-content" id="app-admin">
+            <div class="page-content">
+                <div class="page-content-area">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4">
+                                    <div class="">
+                                        <div class="card">
+                                            <div class="card-body no-padding">
+                                                <div class="alert alert-callout alert-success no-margin">
+                                                    <strong class="pull-right text-success text-lg"><i
+                                                            class="md md-trending-up"></i></strong>
+                                                    <strong
+                                                        class="text-xl">{{convertNumberToString(model.TotalDK)}}</strong>
+                                                    <br />
+                                                    <span class="opacity-50">Đăng ký</span>
+                                                    <span class="opacity-50">Trung
+                                                        bình {{convertNumberToString(model.DkInDay)}} / ngày</span>
+                                                    <div class="stick-bottom-left-right">
+                                                        <div class="height-2 sparkline-revenue"
+                                                            data-line-color="#bdc1c1"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <div class="card">
+                                            <div class="card-body no-padding">
+                                                <div class="alert alert-callout alert-info no-margin">
+                                                    <strong class="pull-right text-warning text-lg"> <i
+                                                            class="md md-swap-vert"></i></strong>
+                                                    <strong class="text-xl">
+                                                        {{convertNumberToString(model.TotalHuy)}}
+                                                    </strong><br />
+                                                    <span class="opacity-50">Hủy</span>
+                                                    <span class="opacity-50">Trung bình
+                                                        {{convertNumberToString(model.HuyInDay)}} / ngày</span>
+                                                    <div class="stick-bottom-right">
+                                                        <div class="height-1 sparkline-visits" data-bar-color="#e5e6e6">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="card">
+                                            <div class="card-body no-padding">
+                                                <div class="alert alert-callout alert-warning no-margin">
+                                                    <strong class="pull-right text-danger text-lg"> <i
+                                                            class="md md-trending-up"></i></strong>
+                                                    <strong class="text-xl">
+                                                        {{convertNumberToString(model.TotalDt)}}
+                                                    </strong><br />
+                                                    <span class="opacity-50">Doanh thu</span>
+                                                    <span class="opacity-50">Trung bình
+                                                        {{convertNumberToString(model.DtInDay)}} / ngày</span>
+                                                    <div class="stick-bottom-right">
+                                                        <div class="height-1 sparkline-visits" data-bar-color="#e5e6e6">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8" style="overflow:auto">
+                                    <div id="container" style="min-width: 700px; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr hr32 hr-dotted"></div>
+                            <div class="row">
+                                <div class="col-xs-12" style="overflow:auto">
+                                    <div id="container1" style="min-width: 1000px; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr hr32 hr-dotted"></div>
+                            <div class="row">
+                                <div class="col-xs-12" style="overflow:auto">
+                                    <div id="container2" style="min-width: 1000px; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr hr32 hr-dotted"></div>
+                            <div class="row">
+                                <div class="col-xs-12" style="overflow:auto">
+                                    <div id="container3" style="min-width: 1000px; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <th:block th:include="/footer"></th:block>
+    </div>
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+    </div>
+</body>
+<script src="js/common/highchart4.2.5/highcharts.js"></script>
+<script src="js/common/highchart4.2.5/modules/exporting.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app-admin',
+        data: { table: {}, model: {} },
+        mounted() {
+            $.LoadingOverlay("show");
+            axios.post("api/vnpTrungBinhThang").then(response => {
+                this.model = response.data[0];
+                console.log(this.model);
+            }).finally(() => { $.LoadingOverlay("hide"); });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
+        GetChart();
+        GetDoanhThu();
+        GetDangKy();
+        GetHuy();
+    });
+
+    function GetChart() {
+        $.ajax({
+            url: "/api/vnpTimeChart",
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                var ngay = "";
+                var total = "";
+                $.each(data, function (i) {
+                    ngay += data[i].Date + ",";
+                    total += data[i].Total + ",";
+                });
+                ngay = ngay.slice(0, -1).split(',');
+                total = JSON.parse("[" + total.substring(0, total.length - 1) + "]");
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'area'
+                    },
+                    title: {
+                        text: 'Biểu đồ doanh thu 1 năm gần đây'
+                    },
+                    xAxis: {
+                        categories: ngay,
+                        tickmarkPlacement: 'on',
+                        title: {
+                            enabled: false
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            //text: 'Doanh thu'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        },
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            }
+                        }
+                    },
+                    tooltip: {
+                        split: true
+                    },
+                    plotOptions: {
+                        area: {
+                            stacking: 'normal',
+                            lineColor: '#666666',
+                            lineWidth: 1,
+                            marker: {
+                                lineWidth: 1,
+                                lineColor: '#666666'
+                            }
+                        }
+                    },
+                    series: [{
+                        data: total,
+                        name: 'Doanh thu',
+                        color: 'rgb(255, 136, 9)', // #080
+                    }]
+                });
+            }
+        })
+    }
+
+    function GetDoanhThu() {
+        var month = ('0' + (new Date().getMonth() + 1)).slice(-2)
+        $.ajax({
+            url: "/api/vnpAmountRegCancel",
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                var ngay = "";
+                var AmountLucky = "";
+                var AmountNuHoang = "";
+                var AmountNtrq = "";
+                var AmountBlgt = "";
+                var AmountIconnect = "";
+                $.each(data, function (i) {
+                    ngay += data[i].Date + ",";
+                    AmountLucky += data[i].AmountLucky + ",";
+                    AmountNuHoang += data[i].AmountNuHoang + ",";
+                    AmountNtrq += data[i].AmountNtrq + ",";
+                    AmountBlgt += data[i].AmountBlgt + ",";
+                    AmountIconnect += data[i].AmountIconnect + ",";
+                });
+                ngay = ngay.slice(0, -1).split(',');
+                AmountLucky = JSON.parse("[" + AmountLucky.substring(0, AmountLucky.length - 1) + "]");
+                AmountNuHoang = JSON.parse("[" + AmountNuHoang.substring(0, AmountNuHoang.length - 1) + "]");
+                AmountNtrq = JSON.parse("[" + AmountNtrq.substring(0, AmountNtrq.length - 1) + "]");
+                AmountBlgt = JSON.parse("[" + AmountBlgt.substring(0, AmountBlgt.length - 1) + "]");
+                AmountIconnect = JSON.parse("[" + AmountIconnect.substring(0, AmountIconnect.length - 1) + "]");
+                Highcharts.chart('container1', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Bảng thống kê doanh thu trong tháng'
+                    },
+                    xAxis: {
+                        categories: ngay
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Doanh thu'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}/' + month + '</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'TCMM',
+                        data: AmountLucky,
+                        color: 'rgb(255, 136, 9)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NHQR',
+                        data: AmountNuHoang,
+                        color: 'rgb(166, 17, 32)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NTRQ',
+                        data: AmountNtrq,
+                        color: 'rgb(17, 95, 166)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'BLGT',
+                        data: AmountBlgt,
+                        color: 'rgb(148, 174, 10)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'ICONNECT',
+                        data: AmountIconnect,
+                        color: 'rgb(226, 15, 15)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    }
+                    ]
+                });
+            }
+        })
+    }
+
+    function GetDangKy() {
+        var month = ('0' + (new Date().getMonth() + 1)).slice(-2)
+        $.ajax({
+            url: "/api/vnpAmountRegCancel",
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                var ngay = "";
+                var RegLucky = "";
+                var RegNuHoang = "";
+                var RegNtrq = "";
+                var RegBlgt = "";
+                var RegIconnect = "";
+                $.each(data, function (i) {
+                    ngay += data[i].Date + ",";
+                    RegLucky += data[i].RegLucky + ",";
+                    RegNuHoang += data[i].RegNuHoang + ",";
+                    RegNtrq += data[i].RegNtrq + ",";
+                    RegBlgt += data[i].RegBlgt + ",";
+                    RegIconnect += data[i].RegIconnect + ",";
+                });
+                ngay = ngay.slice(0, -1).split(',');
+                RegLucky = JSON.parse("[" + RegLucky.substring(0, RegLucky.length - 1) + "]");
+                RegNuHoang = JSON.parse("[" + RegNuHoang.substring(0, RegNuHoang.length - 1) + "]");
+                RegNtrq = JSON.parse("[" + RegNtrq.substring(0, RegNtrq.length - 1) + "]");
+                RegBlgt = JSON.parse("[" + RegBlgt.substring(0, RegBlgt.length - 1) + "]");
+                RegIconnect = JSON.parse("[" + RegIconnect.substring(0, RegIconnect.length - 1) + "]");
+                Highcharts.chart('container2', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Bảng thống kê đăng ký trong tháng'
+                    },
+                    xAxis: {
+                        categories: ngay
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Đăng ký'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}/' + month + '</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'TCMM',
+                        data: RegLucky,
+                        color: 'rgb(255, 136, 9)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NHQR',
+                        data: RegNuHoang,
+                        color: 'rgb(166, 17, 32)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NTRQ',
+                        data: RegNtrq,
+                        color: 'rgb(17, 95, 166)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'BLGT',
+                        data: RegBlgt,
+                        color: 'rgb(148, 174, 10)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'ICONNECT',
+                        data: RegIconnect,
+                        color: 'rgb(226, 15, 15)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    }
+                    ]
+                });
+            }
+        })
+    }
+
+    function GetHuy() {
+        var month = ('0' + (new Date().getMonth() + 1)).slice(-2)
+        $.ajax({
+            url: "/api/vnpAmountRegCancel",
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                var ngay = "";
+                var CancelLucky = "";
+                var CancelNuHoang = "";
+                var CancelNtrq = "";
+                var CancelBlgt = "";
+                var CancelIconnect = "";
+                $.each(data, function (i) {
+                    ngay += data[i].Date + ",";
+                    CancelLucky += data[i].CancelLucky + ",";
+                    CancelNuHoang += data[i].CancelNuHoang + ",";
+                    CancelNtrq += data[i].CancelNtrq + ",";
+                    CancelBlgt += data[i].CancelBlgt + ",";
+                    CancelIconnect += data[i].CancelIconnect + ",";
+                });
+                ngay = ngay.slice(0, -1).split(',');
+                CancelLucky = JSON.parse("[" + CancelLucky.substring(0, CancelLucky.length - 1) + "]");
+                CancelNuHoang = JSON.parse("[" + CancelNuHoang.substring(0, CancelNuHoang.length - 1) + "]");
+                CancelNtrq = JSON.parse("[" + CancelNtrq.substring(0, CancelNtrq.length - 1) + "]");
+                CancelBlgt = JSON.parse("[" + CancelBlgt.substring(0, CancelBlgt.length - 1) + "]");
+                CancelIconnect = JSON.parse("[" + CancelIconnect.substring(0, CancelIconnect.length - 1) + "]");
+                Highcharts.chart('container3', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Bảng thống kê hủy trong tháng'
+                    },
+                    xAxis: {
+                        categories: ngay
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Hủy'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}/' + month + '</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'TCMM',
+                        data: CancelLucky,
+                        color: 'rgb(255, 136, 9)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NHQR',
+                        data: CancelNuHoang,
+                        color: 'rgb(166, 17, 32)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'NTRQ',
+                        data: CancelNtrq,
+                        color: 'rgb(17, 95, 166)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'BLGT',
+                        data: CancelBlgt,
+                        color: 'rgb(148, 174, 10)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        name: 'ICONNECT',
+                        data: CancelIconnect,
+                        color: 'rgb(226, 15, 15)',
+                        dataLabels: {
+                            enabled: false,
+                        }
+                    }
+                    ]
+                });
+            }
+        })
+    }
+</script>
+
+</html>
